@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Valeria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pirata+One&family=Special+Elite&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --mh-pink: #ff007f;
+            --mh-black: #1a1a1a;
+            --mh-blue: #00f2ff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--mh-black);
+            background-image: radial-gradient(var(--mh-pink) 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+            font-family: 'Special Elite', cursive;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            color: white;
+        }
+
+        /* --- SOBRE INICIAL --- */
+        #envelope-container {
+            text-align: center;
+            transition: all 1s ease;
+        }
+
+        .envelope {
+            width: 300px;
+            height: 200px;
+            background: var(--mh-pink);
+            position: relative;
+            border: 4px solid white;
+            margin: 20px auto;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+        }
+
+        .seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 50px;
+            z-index: 10;
+            transition: transform 0.3s;
+        }
+
+        .seal:hover { transform: translate(-50%, -50%) scale(1.2); }
+
+        /* --- HOJAS ROSADAS (CONTENIDO) --- */
+        .page {
+            display: none;
+            width: 90%;
+            max-width: 400px;
+            background: #ff85c1;
+            padding: 30px;
+            border: 8px double var(--mh-black);
+            border-radius: 5px;
+            color: var(--mh-black);
+            box-shadow: 10px 10px 0px var(--mh-pink);
+            position: relative;
+            animation: fadeIn 1s ease;
+        }
+
+        h1 { font-family: 'Pirata One', system-ui; font-size: 2.5rem; margin-bottom: 10px; color: var(--mh-black); text-shadow: 2px 2px var(--mh-blue); }
+        h2 { font-size: 1.2rem; border-bottom: 2px solid var(--mh-black); display: inline-block; }
+
+        .btn-next {
+            margin-top: 20px;
+            background: var(--mh-black);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Special Elite';
+            float: right;
+        }
+
+        .btn-valentine {
+            background: var(--mh-pink);
+            border: 2px solid var(--mh-black);
+            padding: 15px;
+            margin: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn-valentine:hover { transform: rotate(-3deg) scale(1.1); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .hidden { display: none; }
+        .visible { display: block; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="envelope-container">
+        <h1>Te tengo una sorpresa...</h1>
+        <div class="envelope" onclick="openEnvelope()">
+            <div class="seal">🦭</div>
+        </div>
+        <p>Para descubrirla dale click a la foca</p>
+        <p><strong>De Leo para Valeria</strong></p>
+    </div>
+
+    <div id="page1" class="page">
+        <h1>Valentine Day</h1>
+        <h2>¿Quieres ser mi Valentín?</h2>
+        <p>Te quiero y eso es algo que sabes, quiero pasar el 14 contigo y no tiene que ser algo tan romántico si no quieres pero lo único que sé es que quiero pasarla contigo y hacerte reír todo el día.</p>
+        <button class="btn-next" onclick="nextPage(1, 2)">Sig. página</button>
+    </div>
+
+    <div id="page2" class="page">
+        <h1>5 razones por las que eres tú</h1>
+        <ol>
+            <li>Tienes una sonrisa hermosa que nunca me cansaría de ver.</li>
+            <li>Tienes una personalidad increíble.</li>
+            <li>Eres la persona en la cual pienso todos los días.</li>
+            <li>Eres reservada pero eso me gusta, porque mientras más te conozco más me gustas.</li>
+            <li>Eres una niña hermosa.</li>
+        </ol>
+        <p><i>Si al menos te reíste una vez leyendo esto, es una señal obvia.</i></p>
+        <button class="btn-next" onclick="nextPage(2, 3)">Sig. página</button>
+    </div>
+
+    <div id="page3" class="page" style="text-align:center;">
+        <h1>¿Quieres ser mi Valentín?</h1>
+        <button class="btn-valentine" onclick="finalAlert('Ya está, dile al que te mandó esto que lo quieres')">Si obvio</button>
+        <button class="btn-valentine" onclick="finalAlert('¿Qué esperas? dile a quien te mandó esto que lo quieres a tu manera, pero díselo no seas mentirosa')">Por supuesto</button>
+    </div>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+
+        function openEnvelope() {
+            // Iniciar música
+            music.play().catch(e => console.log("La música necesita interacción previa"));
+            
+            // Animación de salida del sobre
+            document.getElementById('envelope-container').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('envelope-container').classList.add('hidden');
+                document.getElementById('page1').classList.add('visible');
+            }, 1000);
+        }
+
+        function nextPage(current, next) {
+            document.getElementById('page' + current).classList.remove('visible');
+            document.getElementById('page' + next).classList.add('visible');
+        }
+
+        function finalAlert(msg) {
+            alert(msg);
+        }
+    </script>
+</body>
+</html>
