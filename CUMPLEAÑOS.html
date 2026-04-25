@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz Cumpleaños Brenda</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            /* Se eliminó overflow: hidden para permitir subir y bajar */
+            overflow-x: hidden; 
+        }
+
+        /* --- PANTALLA 1: INICIO --- */
+        #pantalla-inicio {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Altura mínima para que ocupe toda la pantalla */
+            width: 100%;
+            background: linear-gradient(135deg, #1f1c2c 0%, #928dab 100%);
+            padding: 20px;
+        }
+
+        .boton-regalo {
+            background-color: #ff4b2b;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+
+        .boton-regalo:hover {
+            transform: scale(1.1);
+            background-color: #ff416c;
+        }
+
+        /* --- PANTALLA 2: REPRODUCTOR --- */
+        #pantalla-reproductor {
+            display: none;
+            width: 95%;
+            max-width: 800px;
+            background-color: #1a1a1a;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            border: 1px solid #333;
+            margin: 40px 0; /* Margen para que no pegue a los bordes al subir/bajar */
+        }
+
+        .header-reproductor {
+            background-color: #222;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .circulos {
+            display: flex;
+            gap: 8px;
+        }
+
+        .circulo { width: 12px; height: 12px; border-radius: 50%; }
+        .rojo { background-color: #ff5f56; }
+        .amarillo { background-color: #ffbd2e; }
+        .verde { background-color: #27c93f; }
+
+        .titulo-reproductor {
+            margin-left: 20px;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .contenedor-cine {
+            position: relative;
+            background-color: #000;
+            width: 100%;
+            padding-top: 56.25%; /* Mantener formato 16:9 */
+        }
+
+        .contenedor-cine img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: opacity 0.5s ease;
+        }
+
+        .area-texto {
+            background-color: rgba(0, 0, 0, 0.85);
+            padding: 25px;
+            min-height: 150px; /* Un poco más de espacio para textos largos */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            border-top: 1px solid #333;
+        }
+
+        .area-texto p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .controles-reproductor {
+            background-color: #222;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #333;
+        }
+
+        .barra-progreso {
+            flex-grow: 1;
+            height: 6px;
+            background-color: #444;
+            border-radius: 3px;
+            margin-right: 20px;
+        }
+
+        .progreso-actual {
+            height: 100%;
+            width: 0%;
+            background-color: #ff4b2b;
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .boton-siguiente {
+            background-color: #ff4b2b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* --- PANTALLA 3: FINAL --- */
+        #pantalla-final {
+            display: none;
+            text-align: center;
+            min-height: 100vh;
+            width: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1513151583908-d86b65c02b37?q=80&w=2070&auto=format&fit=crop') no-repeat center center;
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .letrero-final {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 0 0 10px #ff4b2b, 0 0 20px #ff4b2b;
+            animation: latido 1.5s infinite alternate;
+            z-index: 2;
+        }
+
+        @keyframes latido { from { transform: scale(1); } to { transform: scale(1.05); } }
+
+        /* Corazones */
+        .corazon {
+            position: absolute;
+            bottom: -50px;
+            background-color: #ff416c;
+            height: 20px;
+            width: 20px;
+            transform: rotate(-45deg);
+            animation: flotar 4s infinite linear;
+        }
+        .corazon::before, .corazon::after {
+            content: ""; position: absolute; border-radius: 50%; height: 20px; width: 20px; background-color: #ff416c;
+        }
+        .corazon::before { top: -10px; left: 0; }
+        .corazon::after { top: 0; right: -10px; }
+
+        @keyframes flotar {
+            0% { transform: rotate(-45deg) translateY(0); opacity: 1; }
+            100% { transform: rotate(-45deg) translateY(-110vh); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="musica-fondo" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="pantalla-inicio">
+        <button class="boton-regalo" id="btn-comenzar">Presiona para recibir tu regalo</button>
+    </div>
+
+    <div id="pantalla-reproductor">
+        <div class="header-reproductor">
+            <div class="circulos">
+                <div class="circulo rojo"></div>
+                <div class="circulo amarillo"></div>
+                <div class="circulo verde"></div>
+            </div>
+            <div class="titulo-reproductor">Para_Brenda.mp4</div>
+        </div>
+        <div class="contenedor-cine">
+            <img id="imagen-visor" src="foto1.jpg">
+        </div>
+        <div class="area-texto">
+            <p id="texto-visor"></p>
+        </div>
+        <div class="controles-reproductor">
+            <div class="barra-progreso">
+                <div class="progreso-actual" id="barra-progreso-interna"></div>
+            </div>
+            <button class="boton-siguiente" id="btn-siguiente">Siguiente</button>
+        </div>
+    </div>
+
+    <div id="pantalla-final">
+        <div class="letrero-final">FELIZ CUMPLEAÑOS BRENDA</div>
+    </div>
+
+    <script>
+        const textos = [
+            "Feliz cumpleaños, se que puede ser un dia cualquiera para muchos, pero hoy debe ser tu dia, para que lo disfrutes y te diviertas a toda madre.",
+            "Queria hacerlo mas especial y dedicarte algunas palabras, eres una niña increible y desde que te conoci siempre has mostrado un lado bueno conmigo, eres una niña capaz de hacer muchas cosas, como ir a clases de ingles, estudiar para varios examenes, hacer ejercicio debes en cuando y hacer tus cosas del dia, eres una niña trabajadora y muy activa, eres basicamente espectacular para mi.",
+            "Se que has tenido fallos como todos, se que sere una persona mas en tu circulo social pero eso no sigfica que no te pueda decir lo orgulloso que estoy de ti porque por mas que no te salga algo o falles en el intendo, lo sigues intenado y sigues dando todo de ti, aunque tengas la mentalidad de que fallaras aun asi ahi estas intentandolo, yo sere tu apoyo cuando nadie mas te lo de, sere quien te motive cuando nadie mas lo haga y sere quien festeje tus logros contigo.",
+            "Se que no me corresponde nada de eso, pero creeme que desde que te conoci me lleve una gran impresion, ya que eres una persona bastante real y no tienes miedo a decir las cosas, me diste tu confianza asi como yo te la di a ti y aunque no vivamos en la misma ciudad, eso no significa que no pueda estar para ti de forma virutal, asi como tu me haces reir con tus cosas randoms luego luego, yo quieor hacerlo para sacarte una sonrisa cuando estes triste.",
+            "Para acabar solo quiero decirte que te quiero mucho, sigue esforzandote por conseguir tus metas y no hagas caso a los malos comentarios de nadie, absolutamente nadie y solo enfocate en ti, disfruta tu dia y tu fiesta, no es fisico el regalo pero es de corazon."
+        ];
+
+        const imagenes = ["foto1.jpg", "foto2.jpg", "foto3.jpg", "foto4.jpg", "foto5.jpg"];
+        let pasoActual = 0;
+
+        const pInicio = document.getElementById('pantalla-inicio');
+        const pReproductor = document.getElementById('pantalla-reproductor');
+        const pFinal = document.getElementById('pantalla-final');
+        const btnSiguiente = document.getElementById('btn-siguiente');
+        const musica = document.getElementById('musica-fondo');
+
+        document.getElementById('btn-comenzar').addEventListener('click', () => {
+            pInicio.style.display = 'none';
+            pReproductor.style.display = 'block';
+            musica.play();
+            actualizarPaso();
+            window.scrollTo(0, 0); // Sube al inicio al empezar
+        });
+
+        function actualizarPaso() {
+            const img = document.getElementById('imagen-visor');
+            img.style.opacity = 0;
+            setTimeout(() => {
+                img.src = imagenes[pasoActual];
+                img.style.opacity = 1;
+                document.getElementById('texto-visor').innerText = textos[pasoActual];
+                document.getElementById('barra-progreso-interna').style.width = ((pasoActual + 1) / textos.length * 100) + '%';
+                if (pasoActual === textos.length - 1) btnSiguiente.innerText = "Ir al final";
+            }, 300);
+        }
+
+        btnSiguiente.addEventListener('click', () => {
+            if (pasoActual < textos.length - 1) {
+                pasoActual++;
+                actualizarPaso();
+                window.scrollTo(0, 0); // Vuelve arriba para leer el nuevo texto si es largo
+            } else {
+                pReproductor.style.display = 'none';
+                pFinal.style.display = 'flex';
+                crearCorazones();
+                window.scrollTo(0, 0);
+            }
+        });
+
+        function crearCorazones() {
+            for (let i = 0; i < 40; i++) {
+                const c = document.createElement('div');
+                c.classList.add('corazon');
+                c.style.left = Math.random() * 100 + 'vw';
+                c.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                c.style.animationDelay = Math.random() * 2 + 's';
+                pFinal.appendChild(c);
+            }
+        }
+    </script>
+</body>
+</html>
